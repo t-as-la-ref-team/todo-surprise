@@ -1,0 +1,192 @@
+/* Global Styles */
+*, html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+  color: #333; /* Neutral text color */
+}
+
+/* Headings */
+h1, h2, h3 {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #222;
+  margin-bottom: 1rem;
+}
+
+p {
+  font-family: 'Comfortaa', sans-serif;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-warning,
+.btn-success,
+.btn-danger {
+  background-color: goldenrod;
+  border: 2px solid goldenrod;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover,
+.btn-warning:hover,
+.btn-success:hover,
+.btn-danger:hover {
+  transform: translateY(-3px);
+  background-color: darkgoldenrod;
+  border-color: darkgoldenrod;
+}
+
+.btn-danger:hover i {
+  color: red;
+  transform: rotate(15deg);
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+}
+
+.d-flex > .btn-sm,
+.d-flex > .form-select-sm {
+  margin-bottom: 0.5rem; /* Adds spacing for buttons if wrapping occurs */
+}
+
+/* Alerts */
+.alert {
+  background-color: #fff;
+  border: 2px solid goldenrod;
+  color: goldenrod;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Task List */
+.task-list {
+  color: black;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.8s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Navigation Bar */
+.navbar {
+  background-color: #000; /* Deep black navbar */
+  padding: 1rem;
+}
+
+.navbar-brand {
+  color: goldenrod !important;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.navbar-nav .nav-item .nav-link {
+  color: #fff;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  color: goldenrod;
+  border-bottom: 2px solid goldenrod;
+}
+
+.navbar-nav .active {
+  font-weight: bold;
+  border-bottom: 2px solid goldenrod;
+  color: goldenrod !important;
+}
+
+/* Footer Styling */
+footer {
+  background-color: #222;
+  color: #ccc;
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 0.9rem;
+}
+
+/* Utility Classes */
+.mt-3 {
+  margin-top: 1rem;
+}
+.mb-3 {
+  margin-bottom: 1rem;
+}
+.pt-3 {
+  padding-top: 1rem;
+}
+.pb-3 {
+  padding-bottom: 1rem;
+}
+.text-center {
+  text-align: center;
+}
+.text-uppercase {
+  text-transform: uppercase;
+}
+h1 {
+  position: relative;
+  padding-bottom: 10px;
+  overflow: hidden;
+  font-weight: bold;
+  color: black;
+}
+
+h1::after {
+  content: "";
+  position: absolute;
+  left: 0%;
+  bottom: 0;
+  width: 5px;
+  height: 2px;
+  opacity: 0.7;
+  background-color: grey;
+  transition: width 0.5s ease-in-out, left 0.5s ease-in-out;
+}

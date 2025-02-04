@@ -1,0 +1,19 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+footer{
+  min-height: 15vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  background-color:#333;
+  color: white;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+.footer-content{
+  color: white;
+}
