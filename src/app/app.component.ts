@@ -10,5 +10,5 @@ import { FooterComponent } from "./footer/footer/footer.component";
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'first-app';
+  title = 'abubakkar-apps';
 }

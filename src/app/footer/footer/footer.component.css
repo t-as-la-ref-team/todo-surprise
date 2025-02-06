@@ -3,7 +3,7 @@
   padding: 0;
 }
 footer{
-  min-height: 15vh;
+  min-height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
