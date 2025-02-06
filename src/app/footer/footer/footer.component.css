@@ -1,19 +1,17 @@
-*{
-  margin: 0;
-  padding: 0;
-}
+
 footer{
-  min-height: 10vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid black;
-  background-color:#333;
-  color: white;
-  position: absolute;
-  left: 0;
-  right: 0;
+  margin-top: 20px;
+  text-align: center;
+  padding: 17px;
+  color: red;
+  background-color: #333;
 }
-.footer-content{
-  color: white;
+footer p{
+  margin: auto;
+  color: grey;
+  font-family: "Rubik Wet Paint", serif;
+  font-weight: 400;
+  font-style: normal;
+  word-spacing: 6px;
 }
+

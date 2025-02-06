@@ -1,20 +1,23 @@
-
-
 <div class="container">
   <!-- Add New Category -->
-  <div class="row mb-4 mt-4">
-    <div class="col-12">
-      <h1>Cards...</h1>
+  <div class="col-12">
+    <h1>Cards...</h1>
+  </div>
+  <div class="row justify-content-center ">
+
+    <div class="col-lg-6 col-md-12 ">
+      <div class="input-group mb-3">
+        <input
+          class="form-control"
+          [(ngModel)]="newCategoryTitle"
+          placeholder="New Card Title"
+        />
+        <button class="btn btn-primary  " (click)="addCategory()">
+          Add
+        </button>
+
     </div>
-    <div class="col-12 d-flex align-items-center">
-      <input
-        class="form-control me-2"
-        [(ngModel)]="newCategoryTitle"
-        placeholder="New Card Title"
-      />
-      <button class="btn btn-primary btn-sm mt-1" (click)="addCategory()">
-        Add
-      </button>
+
     </div>
 
     <!-- Display error message for the category field -->
@@ -35,7 +38,6 @@
     <div
       *ngFor="let category of categories; let i = index"
       class="col-sm-12 col-md-4 col-lg-4"
-
       @fadeInOut
     >
       <div class="card shadow-sm">
@@ -47,7 +49,7 @@
             <input
               [(ngModel)]="categories[i].title"
               class="form-control"
-              placeholder="Edit Category Title"
+              placeholder="Edit Card Title"
             />
           </div>
           <ng-template #viewCategoryMode>
@@ -99,70 +101,94 @@
             id="category-{{ i }}"
             cdkDragAnimate
           >
-          <div
-          *ngFor="let task of category.tasks; let j = index; trackBy: trackTask"
-          cdkDrag
-          class="task-item d-flex align-items-center mb-2 p-2 bg-light border position-relative"
-        >
-          <!-- Task Content -->
-          <div class="task-content flex-grow-1">
-            <div *ngIf="editingTaskIndex === j && editingTaskCategoryIndex === i; else viewTaskMode">
-              <input
-                [(ngModel)]="categories[i].tasks[j]"
-                (ngModelChange)="updateTask($event, i, j)"
-                class="form-control"
-                placeholder="Edit Task"
-              />
-            </div>
-            <ng-template #viewTaskMode>
-              <span>{{ task }}</span>
-            </ng-template>
-          </div>
-
-          <!-- Task Actions -->
-          <div class="d-flex align-items-center margin ms-2 task-btn">
-            <button
-              class="btn btn-sm btn-warning me-2 mt-1"
-              *ngIf="editingTaskIndex !== j || editingTaskCategoryIndex !== i"
-              (click)="editTask(i, j)"
-            >
-              Edit
-            </button>
-            <button
-              class="btn btn-sm btn-success me-2 mt-1"
-              *ngIf="editingTaskIndex === j && editingTaskCategoryIndex === i"
-              (click)="saveTask(i, j)"
-            >
-              Save
-            </button>
-            <button
-              class="btn btn-sm btn-danger me-2 mt-1"
-              (click)="deleteTask(i, j)"
-              title="Delete Task"
-            >
-              <i class="fa fa-trash"></i>
-            </button>
-
-            <!-- Dropdown for Moving Task -->
-            <div class="task-move">
-              <select
-                class="form-select form-select-sm"
-                (change)="moveTask(i, j, $event)"
+            <div *ngIf="category.tasks.length > 0; else noTasks">
+              <div
+                *ngFor="
+                  let task of category.tasks;
+                  let j = index;
+                  trackBy: trackTask
+                "
+                cdkDrag
+                class="task-item d-flex align-items-center mb-2 p-2 border position-relative"
               >
-                <option value="" selected disabled>Move to...</option>
-                <option
-                  *ngFor="let cat of categories; let k = index"
-                  [value]="k"
-                  [disabled]="i === k"
-                >
-                  {{ cat.title }}
-                </option>
-              </select>
+                <!-- Task Content -->
+                <div class="task-content flex-grow-1">
+                  <div
+                    *ngIf="
+                      editingTaskIndex === j && editingTaskCategoryIndex === i;
+                      else viewTaskMode
+                    "
+                  >
+                    <input
+                      [(ngModel)]="categories[i].tasks[j]"
+                      (ngModelChange)="updateTask($event, i, j)"
+                      class="form-control"
+                      placeholder="Edit Task"
+                    />
+                  </div>
+                  <ng-template #viewTaskMode>
+                    <span>{{ task }}</span>
+                  </ng-template>
+                </div>
+
+                <!-- Task Actions -->
+                <div class="d-flex align-items-center margin ms-2 task-btn">
+                  <button
+                    class="btn btn-sm btn-warning me-2 mt-1"
+                    *ngIf="
+                      editingTaskIndex !== j || editingTaskCategoryIndex !== i
+                    "
+                    (click)="editTask(i, j)"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    class="btn btn-sm btn-success me-2 mt-1"
+                    *ngIf="
+                      editingTaskIndex === j && editingTaskCategoryIndex === i
+                    "
+                    (click)="saveTask(i, j)"
+                  >
+                    Save
+                  </button>
+                  <button
+                    class="btn btn-sm btn-danger me-2 mt-1"
+                    (click)="deleteTask(i, j)"
+                    title="Delete Task"
+                  >
+                    <i class="fa fa-trash"></i>
+                  </button>
+
+                  <!-- Dropdown for Moving Task -->
+                  <div class="task-move">
+                    <select
+                      class="form-select form-select-sm"
+                      (change)="moveTask(i, j, $event)"
+                    >
+                      <option value="" selected disabled>Move to...</option>
+                      <option
+                        *ngFor="let cat of categories; let k = index"
+                        [value]="k"
+                        [disabled]="i === k"
+                      >
+                        {{ cat.title }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-
+            <!-- No Tasks Message -->
+            <ng-template #noTasks>
+              <div class="text-center text-muted p-3 noTasks">
+                <i class="fa fa-inbox fa-2x"></i>
+                <p>
+                  No tasks available in this card<br />You may drag and drop
+                  tasks here
+                </p>
+              </div>
+            </ng-template>
           </div>
         </div>
       </div>
@@ -171,8 +197,12 @@
 
   <!-- Message when no categories are available -->
   <ng-template #noCategory>
-    <div class="text-center mt-4">
-      <p class="alert">Please add Card.</p>
+    <div class="no-category-container text-center">
+      <i class="fas fa-folder-open no-category-icon"></i>
+      <p class="no-category-text">
+        No cards available.<br />
+        Please add a card to get started!
+      </p>
     </div>
   </ng-template>
 </div>

@@ -30,6 +30,9 @@
         <li class="nav-item" [class.active]="currentRoute === '/todos'">
           <a class="nav-link" routerLink="/todos" (click)="closeNavbar()">Task</a>
         </li>
+        <li class="nav-item" [class.active]="currentRoute === '/weather'">
+          <a class="nav-link" routerLink="/weather" (click)="closeNavbar()">Weather</a>
+        </li>
       </ul>
     </div>
   </div>
@@ -38,12 +41,17 @@
 <!-- User Name Modal -->
 <div class="modal fade" id="userNameModal" tabindex="-1" aria-labelledby="userNameModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content dark-modal">
       <div class="modal-header">
         <h5 class="modal-title" id="userNameModalLabel">Enter Your Name</h5>
       </div>
       <div class="modal-body">
-        <input type="text" class="form-control" [(ngModel)]="tempUserName" placeholder="Enter your name" />
+        <input
+          type="text"
+          class="form-control dark-input"
+          [(ngModel)]="tempUserName"
+          placeholder="Enter your name"
+        />
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="saveUserName()">Save</button>
@@ -51,4 +59,5 @@
     </div>
   </div>
 </div>
+
 
