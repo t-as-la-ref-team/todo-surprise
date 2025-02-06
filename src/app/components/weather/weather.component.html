@@ -18,7 +18,7 @@
       <!-- Weather Card with Animations -->
       <div *ngIf="weatherData  " @fadeIn class="card shadow-lg">
         <div class="card-header  text-white text-center p-3">
-          <h4>{{ weatherData.location.name }}, {{ weatherData.location.country }}</h4>
+          <h2>{{ weatherData.location.name }}, {{ weatherData.location.country }}</h2>
           <p class="mb-0">{{ weatherData.location.region }}</p>
         </div>
         <div class="card-body text-center">

@@ -80,6 +80,7 @@ p {
   transform: translateY(-3px);
   background-color: darkgoldenrod;
   border-color: darkgoldenrod;
+  color: black;
 }
 
 .btn-danger:hover i {
@@ -89,7 +90,7 @@ p {
 
 .btn-sm {
   padding: 5px 10px;
-  font-size: 0.59rem;
+  font-size: 0.63rem;
   margin-top: 5px;
 }
 
@@ -351,7 +352,9 @@ h2 {
   font-family: "Rubik Wet Paint", serif;
   font-weight: 400;
   font-style: normal;
+  color: white;
 }
+
 
 /* Keyframes for Floating Effect */
 @keyframes floating {
