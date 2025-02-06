@@ -220,6 +220,7 @@ p {
   color: white;
   background-color: #1a1a1d; /* Dark Gray */
   border-radius: 1em;
+  box-shadow: 0px 0px 15px rgba(255, 215, 0, 0.5);
 }
 
 /* Utility Classes */
