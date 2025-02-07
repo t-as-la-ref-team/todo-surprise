@@ -19,62 +19,62 @@
       <div *ngIf="weatherData  " @fadeIn class="card shadow-lg">
         <div class="card-header  text-white text-center p-3">
           <h2>{{ weatherData.location.name }}, {{ weatherData.location.country }}</h2>
-          <p class="mb-0">{{ weatherData.location.region }}</p>
+          <p class="mb-0 text-light">{{ weatherData.location.region }}</p>
         </div>
         <div class="card-body text-center">
           <!-- Weather Icon with Bounce Animation -->
           <img [src]="'https:' + weatherData.current.condition.icon" alt="Weather Icon" @bounce>
           <h2 class="text-light">{{ weatherData.current.temp_c }}°C</h2>
-          <p class="lead">{{ weatherData.current.condition.text }}</p>
+          <p class="lead text-light">{{ weatherData.current.condition.text }}</p>
 
           <hr>
 
           <div class="row">
             <div class="col">
-              <p><strong>Feels Like:</strong> {{ weatherData.current.feelslike_c }}°C</p>
+              <p class="text-light"><strong>Feels Like:</strong><span  class="display-6"> {{ weatherData.current.feelslike_c }}</span>°C</p>
             </div>
             <div class="col">
-              <p><strong>Humidity:</strong> {{ weatherData.current.humidity }}%</p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <p><strong>Wind:</strong> {{ weatherData.current.wind_kph }} kph ({{ weatherData.current.wind_dir }})</p>
-            </div>
-            <div class="col">
-              <p><strong>Gust Speed:</strong> {{ weatherData.current.gust_kph }} kph</p>
+              <p class="text-light"><strong>Humidity:</strong> <span class="display-6"> {{ weatherData.current.humidity }}</span>%</p>
             </div>
           </div>
 
           <div class="row">
             <div class="col">
-              <p><strong>Pressure:</strong> {{ weatherData.current.pressure_mb }} mb</p>
+              <p class="text-light"><strong>Wind:</strong> <span class="display-6"> {{ weatherData.current.wind_kph }} </span>kph <span class="display-6"> ({{ weatherData.current.wind_dir }})</span></p>
             </div>
             <div class="col">
-              <p><strong>Visibility:</strong> {{ weatherData.current.vis_km }} km</p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <p><strong>Dew Point:</strong> {{ weatherData.current.dewpoint_c }}°C</p>
-            </div>
-            <div class="col">
-              <p><strong>Heat Index:</strong> {{ weatherData.current.heatindex_c }}°C</p>
+              <p class="text-light"><strong>Gust Speed:</strong> <span class="display-6"> {{ weatherData.current.gust_kph }}</span>kph</p>
             </div>
           </div>
 
           <div class="row">
             <div class="col">
-              <p><strong>UV Index:</strong> {{ weatherData.current.uv }}</p>
+              <p class="text-light"><strong>Pressure:</strong> <span class="display-6"> {{ weatherData.current.pressure_mb }}</span>mb</p>
+            </div>
+            <div class="col">
+              <p class="text-light"><strong>Visibility:</strong> <span class="display-6"> {{ weatherData.current.vis_km }}</span> km</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <p class="text-light"><strong>Dew Point:</strong><span class="display-6"> {{ weatherData.current.dewpoint_c }}</span>°C</p>
+            </div>
+            <div class="col">
+              <p class="text-light"><strong>Heat Index:</strong> <span class="display-6">  {{ weatherData.current.heatindex_c }}</span>°C</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <p class="text-light"><strong>UV Index:</strong> <span class="display-6"> {{ weatherData.current.uv }}</span> </p>
             </div>
           </div>
 
         </div>
 
         <div class="card-footer text-center   ">
-          Last Updated: {{ weatherData.current.last_updated }}
+          Last Updated: <span class="display-6">{{ weatherData.current.last_updated }}</span>
         </div>
       </div>
 

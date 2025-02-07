@@ -1,5 +1,5 @@
 /* Global Styles */
-@import url('https://fonts.googleapis.com/css2?family=Kumar+One&family=Pacifico&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Rubik+Wet+Paint&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Kumar+One&family=Pacifico&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Rubik+Wet+Paint&display=swap");
 
 *,
 html,
@@ -10,7 +10,8 @@ body {
   font-weight: 400;
   font-style: normal;
   line-height: 1.6;
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   font-weight: 100;
   font-style: normal;
   scroll-behavior: smooth;
@@ -28,7 +29,7 @@ h3 {
   font-weight: 400;
   font-style: normal;
   color: #222;
- word-spacing: 7px;
+  word-spacing: 7px;
   margin-bottom: 1rem;
 }
 h1 {
@@ -42,7 +43,6 @@ h1 {
 h1::first-letter {
   font-size: 2em;
   color: goldenrod;
-
 }
 p {
   font-family: "Comfortaa", sans-serif;
@@ -148,42 +148,38 @@ p {
 /* Navigation Bar */
 .navbar {
   background-color: #000; /* Deep black navbar */
-
-
 }
 
 .navbar-brand {
-
   color: goldenrod !important;
-    background: 50% 100% / 50% 100% no-repeat
-                radial-gradient(ellipse at bottom, goldenrod, transparent, transparent);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    font-size: 1.5rem;
-    font-family: "Rubik Wet Paint", serif;
-    font-weight: 400;
-    font-style: normal;
-    animation:
-               glow 2500ms linear infinite 2000ms;
-               font-family: "Kumar One", serif;
-               font-family: "Rubik Wet Paint", serif;
-               font-weight: 400;
-               font-style: normal;
+  background: 50% 100% / 50% 100% no-repeat
+    radial-gradient(ellipse at bottom, goldenrod, transparent, transparent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 1.5rem;
+  font-family: "Rubik Wet Paint", serif;
+  font-weight: 400;
+  font-style: normal;
+  animation: glow 2500ms linear infinite 2000ms;
+  font-family: "Kumar One", serif;
+  font-family: "Rubik Wet Paint", serif;
+  font-weight: 400;
+  font-style: normal;
 }
-    @keyframes reveal {
-      80%{
-        letter-spacing: 8px;
-      }
-      100% {
-        background-size: 600% 600%;
-      }
-    }
-    @keyframes glow {
-      40% {
-        text-shadow: 0 0 80px rgb(236, 162, 0);
-      }
-    }
+@keyframes reveal {
+  80% {
+    letter-spacing: 8px;
+  }
+  100% {
+    background-size: 600% 600%;
+  }
+}
+@keyframes glow {
+  40% {
+    text-shadow: 0 0 80px rgb(236, 162, 0);
+  }
+}
 
 .navbar-nav .nav-item .nav-link {
   color: #fff;
@@ -193,6 +189,7 @@ p {
   font-family: "Rubik Wet Paint", serif;
   font-weight: 400;
   font-style: normal;
+
 }
 
 .navbar-nav .nav-item .nav-link:hover {
@@ -246,7 +243,6 @@ p {
 .form-control::placeholder {
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.84rem;
-
 }
 .form-select {
   background-color: #333;
@@ -356,7 +352,6 @@ h2 {
   color: white;
 }
 
-
 /* Keyframes for Floating Effect */
 @keyframes floating {
   0% {
@@ -369,7 +364,7 @@ h2 {
     transform: translateY(0); /* Return to original position */
   }
 }
-h5{
+h5 {
   font-family: "Rubik Wet Paint", serif;
   font-weight: 200;
   font-style: normal;
@@ -377,3 +372,44 @@ h5{
   word-spacing: 5px;
 }
 
+.display-6 {
+  font-size: 0.89rem;
+  color: rgb(218, 203, 203);
+}
+@media (max-width: 320px) {
+  p,.lead, .task-text, .card-footer, .noTasks  {
+    font-size: 12px;
+  }
+  .display-6 {
+    font-size: 11px;
+  }
+  h1,
+  h2 {
+    font-size: 16px;
+  }
+  .card-footer {
+    font-size: 12px;
+  }
+  footer p{
+    font-size: 11px!important;
+    word-spacing: 1px!important;
+  }
+  .btn-primary,.form-control::placeholder{
+    font-size: 10px;
+  }
+  .task-text{
+    font-size: 13px;
+  }
+  .btn-sm{
+    font-size: 9px;
+  }
+
+}
+
+@media (max-width: 995px) {
+.navbar-nav .nav-item  {
+  text-align: center;
+}
+
+
+}
