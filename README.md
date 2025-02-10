@@ -13,8 +13,7 @@ This is a **standalone Angular 19** To-Do application where users can enter and 
 ✅ Includes a **Hangman Game** for fun  
 ✅ Fully **Responsive UI** for all screen sizes  
 
----
-🏷️ Tags
+# 🏷️ Tags
 ![Angular](https://img.shields.io/badge/Angular-19-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![ToDo App](https://img.shields.io/badge/ToDo%20App-Task%20Manager-brightgreen?style=for-the-badge)
 ![Offline Support](https://img.shields.io/badge/Offline-Support-blue?style=for-the-badge)
@@ -23,6 +22,7 @@ This is a **standalone Angular 19** To-Do application where users can enter and 
 ![Responsive UI](https://img.shields.io/badge/Responsive-UI-ff69b4?style=for-the-badge)
 ![Standalone Components](https://img.shields.io/badge/Standalone-Components-9cf?style=for-the-badge)
 
+---
 
 ## 🛠 Development Server  
 
