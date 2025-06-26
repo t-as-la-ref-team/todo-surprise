@@ -83,6 +83,33 @@ p {
   color: black;
 }
 
+.btn-secondary {
+  background-color: transparent;
+  border: 2px solid gray;
+  color: gray;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  font-family: "Rubik Wet Paint", serif;
+  font-style: normal;
+}
+
+.btn-secondary:hover {
+  background-color: gray;
+  color: white;
+  border-color: gray;
+  transform: translateY(-3px);
+}
+.btn-secondary i {
+  transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
 .btn-danger:hover i {
   color: red;
   transform: rotate(15deg);
