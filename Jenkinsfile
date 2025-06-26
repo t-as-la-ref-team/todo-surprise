@@ -1,6 +1,10 @@
 pipeline {
   agent any
   
+  tools {
+    nodejs 'NodeJS' // Assurez-vous que le nom correspond à votre configuration Node.js dans Jenkins
+  }
+  
   triggers {
     githubPush()
   }
