@@ -1,14 +1,14 @@
 pipeline {
   agent any
-  
+
   tools {
-    nodejs 'NodeJS' // Assurez-vous que le nom correspond à votre configuration Node.js dans Jenkins
+    nodejs 'NodeJS'
   }
-  
+
   triggers {
     githubPush()
   }
-  
+
   environment {
     DISCORD_WEBHOOK_GIT    = credentials('discord-webhook-git')
     DISCORD_WEBHOOK_TEST   = credentials('discord-webhook-test')
