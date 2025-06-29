@@ -20,7 +20,7 @@ export class MemberComponent {
   currentMember: Member = { id: 0, firstname: '', lastname: '', email: '' };
   isEditMode: boolean = false;
   modalInstance: any;
-  errorMessage: string = ''; // Ajout pour le message d'erreur
+  errorMessage: string = '';
 
   ngOnInit() {
     this.loadMembers();
@@ -32,10 +32,7 @@ export class MemberComponent {
 
   submit() {
     this.errorMessage = '';
-
-    // Regex pour lettres uniquement (accents inclus)
     const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\-\'\s]+$/;
-    // Regex pour email contenant au moins un @
     const emailRegex = /@/;
 
     if (!this.currentMember.firstname || !this.currentMember.lastname || !this.currentMember.email) {

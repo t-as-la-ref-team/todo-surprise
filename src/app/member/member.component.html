@@ -4,7 +4,6 @@
     <button class="btn btn-primary" (click)="openModal()">Add Member</button>
   </div>
 
-  <!-- Modal -->
   <div class="modal fade" id="memberModal" tabindex="-1" aria-labelledby="memberModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content bg-dark text-white">
@@ -46,9 +45,7 @@
   </div>
 
 
-  <!-- Conditional Rendering -->
   <div class="task-list card p-3 shadow">
-    <!-- Task List -->
     <ul class="list-group">
       <li class="list-group-item task-item d-flex align-items-center justify-content-between mt-2"
         *ngFor="let member of members">
