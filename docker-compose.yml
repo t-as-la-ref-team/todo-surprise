@@ -24,7 +24,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
 
-    db:
+  db:
     image: postgres:15
     restart: always
     environment:

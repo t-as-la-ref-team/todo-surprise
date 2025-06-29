@@ -19,11 +19,11 @@
           <form>
             <div class="mb-3">
               <label class="form-label fw-bold">Last Name</label>
-              <input type="text" class="form-control" [(ngModel)]="currentMember.lastName" name="lastName">
+              <input type="text" class="form-control" [(ngModel)]="currentMember.lastname" name="lastName">
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold">First Name</label>
-              <input type="text" class="form-control" [(ngModel)]="currentMember.firstName" name="firstName">
+              <input type="text" class="form-control" [(ngModel)]="currentMember.firstname" name="firstName">
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold">Email</label>
@@ -43,19 +43,20 @@
   </div>
 
 
-   <!-- Conditional Rendering -->
-  <div  class="task-list card p-3 shadow">
+  <!-- Conditional Rendering -->
+  <div class="task-list card p-3 shadow">
     <!-- Task List -->
     <ul class="list-group">
-      <li class="list-group-item task-item d-flex align-items-center justify-content-between mt-2" *ngFor="let member of [{ id: 1, lastName: 'Rouillon', firstName: 'Ambre', email: 'ambre.Rouillongmail.com' }]">
-        <div class="d-flex align-items-center" style="gap: 10rem;">
+      <li class="list-group-item task-item d-flex align-items-center justify-content-between mt-2"
+        *ngFor="let member of members">
+        <div class="d-flex align-items-center" style="gap: 5rem;">
           <div class="d-flex gap-1">
             <p class="mb-0 fw-bold text-white">Last Name :</p>
-            <p class="mb-0 text-white">{{ member.lastName }}</p>
+            <p class="mb-0 text-white">{{ member.lastname }}</p>
           </div>
           <div class="d-flex gap-1">
-            <p class="mb-0 fw-bold text-white">First Name:</p>
-            <p class="mb-0 text-white">{{ member.firstName }}</p>
+            <p class="mb-0 fw-bold text-white">First Name :</p>
+            <p class="mb-0 text-white">{{ member.firstname }}</p>
           </div>
           <div class="d-flex gap-1">
             <p class="mb-0 fw-bold text-white">Email :</p>
@@ -65,13 +66,13 @@
 
         <div class="d-flex gap-2">
           <button class="btn btn-warning" (click)="openModal(member)">Update</button>
-          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-danger" (click)="deleteMember(member.id)">Delete</button>
         </div>
 
       </li>
     </ul>
   </div>
 
-  
- 
+
+
 </div>
