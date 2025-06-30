@@ -3,6 +3,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ApiService } from '../service/api.service';
+import { Task } from '../models/task.model';
 
 @Component({
   selector: 'app-todo',
@@ -12,30 +14,69 @@ import { Router } from '@angular/router';
   styleUrls: ['./todo.component.css']
 })
 export class TodoComponent implements OnInit {
-  tasks: { text: string; completed: boolean; editing: boolean }[] = [];
+  tasks: (Task & { editing?: boolean })[] = [];
   newTask: string = '';
-  constructor(private router: Router) {}
-  ngOnInit() {
-    // Load tasks from local storage
-    const savedTasks = localStorage.getItem('tasks');
-    if (savedTasks) {
-      this.tasks = JSON.parse(savedTasks);
-    }
 
-    // Request notification permission from the user
+  constructor(private router: Router, private apiService: ApiService) {}
+
+  ngOnInit() {
+    this.loadTasksFromBackend();
+
     if ("Notification" in window) {
       Notification.requestPermission();
     }
 
-    // Run background task every minute
     setInterval(() => {
       this.showTaskNotification();
-    }, 3600000); // Every 60 mins
+    }, 3600000);
   }
 
+  loadTasksFromBackend() {
+    this.apiService.getTasks().subscribe(tasks => {
+      this.tasks = tasks.map(task => ({ ...task, editing: false }));
+    });
+  }
+
+  addTask() {
+    if (!this.newTask.trim()) return;
+    this.apiService.addTask({ name: this.newTask, completed: false }).subscribe(newTask => {
+      this.tasks.push({ ...newTask, editing: false });
+      this.newTask = '';
+    });
+  }
+
+  toggleTaskCompletion(index: number) {
+    const task = this.tasks[index];
+    const updatedTask = { ...task, completed: !task.completed };
+    this.apiService.updateTask(updatedTask).subscribe(updated => {
+      this.tasks[index] = { ...updated, editing: false };
+    });
+  }
+
+  toggleEditTask(index: number) {
+    const task = this.tasks[index];
+    if (task.editing) {
+      // Save changes
+      this.apiService.updateTask(task).subscribe(updated => {
+        this.tasks[index] = { ...updated, editing: false };
+      });
+    } else {
+      this.tasks[index].editing = true;
+    }
+  }
+
+  onEditTaskName(index: number, event: any) {
+    this.tasks[index].name = event.target.value;
+  }
+
+  deleteTask(index: number) {
+    const task = this.tasks[index];
+    this.apiService.deleteTask(task.id).subscribe(() => {
+      this.tasks.splice(index, 1);
+    });
+  }
 
   private showTaskNotification() {
-
     const userName = localStorage.getItem('userName') || 'User';
     const appName = localStorage.getItem('appName') || 'Todo App';
 
@@ -43,7 +84,6 @@ export class TodoComponent implements OnInit {
       let notificationMessage = '';
 
       if (this.remainingTasks > 0) {
-        // User has pending tasks
         notificationMessage = `Hey ${userName}, you have ${this.remainingTasks} tasks to complete! ✅`;
       } else {
         notificationMessage = `Hey ${userName}, you have no tasks! Add new tasks in "${appName}" to stay productive. 🚀`;
@@ -56,43 +96,13 @@ export class TodoComponent implements OnInit {
 
       notification.onclick = () => {
         window.focus();
-        this.router.navigate(['/todos']); // Navigate to the task page
+        this.router.navigate(['/todos']);
       };
-    }else{
+    } else {
       if ("Notification" in window) {
         Notification.requestPermission();
       }
     }
-  }
-
-
-  addTask() {
-    if (this.newTask.trim()) {
-      this.tasks.unshift({ text: this.newTask, completed: false, editing: false });
-      this.newTask = '';
-      this.saveToLocalStorage(); // Save tasks to local storage
-    }
-  }
-
-  toggleTaskCompletion(index: number) {
-    this.tasks[index].completed = !this.tasks[index].completed;
-    this.saveToLocalStorage(); // Save tasks to local storage
-  }
-
-  toggleEditTask(index: number) {
-    if (this.tasks[index].editing) {
-      // Save task
-      this.tasks[index].editing = false;
-      this.saveToLocalStorage(); // Save tasks to local storage
-    } else {
-      // Enable edit mode
-      this.tasks[index].editing = true;
-    }
-  }
-
-  deleteTask(index: number) {
-    this.tasks.splice(index, 1);
-    this.saveToLocalStorage(); // Save tasks to local storage
   }
 
   get remainingTasks() {
@@ -101,9 +111,5 @@ export class TodoComponent implements OnInit {
 
   get completedTasks() {
     return this.tasks.filter(task => task.completed).length;
-  }
-
-  private saveToLocalStorage() {
-    localStorage.setItem('tasks', JSON.stringify(this.tasks));
   }
 }
