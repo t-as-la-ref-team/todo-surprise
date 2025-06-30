@@ -1,8 +1,8 @@
 pipeline {
   agent {
     docker {
-      image 'cypress/browsers:node-20.10.0-chrome-124-ff-124' // 🧪 Image Cypress complète
-      args '-u root' // ⚠️ Obligatoire pour installer des dépendances si besoin
+      image 't-as-la-ref-agent:latest' // ⬅ mets ici le bon nom de ton image
+      args '-u root -v /var/run/docker.sock:/var/run/docker.sock'
     }
   }
 
@@ -17,9 +17,9 @@ pipeline {
     stage('Notifier Discord') {
       steps {
         script {
-          def author  = sh(script: "git log -1 --pretty=format:%an", returnStdout: true).trim()
+          def author = sh(script: "git log -1 --pretty=format:%an", returnStdout: true).trim()
           def message = sh(script: "git log -1 --pretty=format:%s", returnStdout: true).trim()
-          def branch  = env.GIT_BRANCH ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+          def branch = env.GIT_BRANCH ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
           sh """curl -H "Content-Type:application/json" -X POST -d '{"content": "📢 Push sur `${branch}`\\n👤 Auteur : ${author}\\n📝 Commit : ${message}"}' "${DISCORD_WEBHOOK_GIT}" """
         }
       }
