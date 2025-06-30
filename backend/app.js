@@ -3,11 +3,14 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const cors = require('cors');
+app.use(cors());
 const membersRoutes = require('./routes/membres');
-const db = require('./db'); // Assurez-vous que le chemin est correct
+const tachesRoutes = require('./routes/taches');
+const db = require('./db');
 
 app.use(express.json());
 app.use(cors());
 app.use('/api/membres', membersRoutes);
+app.use('/api/taches', tachesRoutes);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
