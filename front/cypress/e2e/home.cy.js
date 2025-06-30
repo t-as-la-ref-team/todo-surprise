@@ -7,3 +7,4 @@ describe('Page /todos - To-Do App', () => {
     cy.contains('No tasks available');
   });
 });
+
