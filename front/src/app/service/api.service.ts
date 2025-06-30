@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Member } from '../models/member.model';
 import { Task } from '../models/task.model';
 
@@ -12,7 +14,7 @@ export class ApiService {
   private apiUrl = 'http://localhost:3000/api/membres';
   private tasksUrl = 'http://localhost:3000/api/taches';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   // Member-related methods
 
@@ -32,10 +34,18 @@ export class ApiService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
+  
   // Task-related methods
 
   getTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(this.tasksUrl);
+    return this.http.get<Task[]>(this.tasksUrl).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.router.navigate(['/unauthorized']);
+        }
+        return throwError(() => error);
+      })
+    );
   }
 
   addTask(task: Omit<Task, 'id'>): Observable<Task> {
