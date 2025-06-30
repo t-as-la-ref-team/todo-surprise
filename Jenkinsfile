@@ -32,15 +32,13 @@ pipeline {
       }
     }
 
+
     stage('Test E2E (Cypress)') {
       steps {
         dir('front') {
           sh 'npm ci'
           script {
-            def exitCode = sh(script: '''
-              export PATH=$PATH:/usr/bin
-              xvfb-run --auto-servernum -- npm run test:e2e
-            ''', returnStatus: true)
+            def exitCode = sh(script: 'npm run test:e2e', returnStatus: true)
             if (exitCode != 0) {
               echo '❌ Tests Cypress échoués.'
               sh """
@@ -67,6 +65,7 @@ pipeline {
       }
     }
 
+    // Commentez temporairement les étapes nécessitant npm
     stage('Test E2E (Cypress) - DÉSACTIVÉ') {
       steps {
         echo "Tests Cypress temporairement désactivés - Docker non disponible sur le serveur Jenkins"
@@ -77,6 +76,23 @@ pipeline {
         """
       }
     }
+    
+    // stage('Analyse SonarQube') {
+    //   when {
+    //     expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
+    //   }
+    //   steps {
+    //     withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+    //       sh '''
+    //         sonar-scanner \
+    //           -Dsonar.projectKey=t-as-la-ref \
+    //           -Dsonar.sources=. \
+    //           -Dsonar.host.url=http://212.83.130.69:9000 \
+    //           -Dsonar.token=$SONAR_TOKEN
+    //       '''
+    //     }
+    //   }
+    // }
 
     stage('Analyse SonarQube - DÉSACTIVÉ') {
       steps {
