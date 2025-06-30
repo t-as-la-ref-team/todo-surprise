@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db'); // Assurez-vous que le chemin est correct
+const db = require('../db');
 
 // POST - ajouter un membre
 router.post('/', async (req, res) => {
