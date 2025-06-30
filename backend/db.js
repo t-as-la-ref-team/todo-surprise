@@ -11,7 +11,7 @@ const db = pgp({
 db.connect()
   .then(obj => {
     console.log('✅ Connexion à PostgreSQL réussie');
-    obj.done(); // libère la connexion
+    obj.done();
   })
   .catch(error => {
     console.error('❌ Erreur de connexion à PostgreSQL :', error.message || error);
