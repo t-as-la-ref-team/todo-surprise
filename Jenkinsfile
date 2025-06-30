@@ -33,45 +33,36 @@ pipeline {
     }
 
     stage('Test E2E (Cypress)') {
-      steps {
-        dir('front') {
-          sh 'npm ci'
-          script {
-            // Démarre Angular en arrière-plan
-            sh 'nohup npm run start -- --host=0.0.0.0 --port=4200 > angular.log 2>&1 &'
-
-            // Attend qu’il soit prêt
-            timeout(time: 2, unit: 'MINUTES') {
-              sh 'npx wait-on http://localhost:4200'
-            }
-
-            // Exécute les tests
-            def exitCode = sh(script: 'npm run test:e2e', returnStatus: true)
-            if (exitCode != 0) {
-              echo '❌ Tests Cypress échoués.'
-              sh """
-                curl -H "Content-Type:application/json" -X POST -d '{
-                  "content": "❌ **Tests Cypress échoués !**\\nVoir les résultats dans Jenkins pour plus d’informations."
-                }' "${DISCORD_WEBHOOK_TEST}"
-              """
-              error('Fin du build suite à des erreurs Cypress')
-            } else {
-              echo '✅ Tests Cypress passés avec succès.'
-              sh """
-                curl -H "Content-Type:application/json" -X POST -d '{
-                  "content": "✅ Tests Cypress passés avec succès !"
-                }' "${DISCORD_WEBHOOK_TEST}"
-              """
-            }
-          }
-        }
-      }
-      post {
-        always {
-          junit testResults: 'front/cypress/results/*.xml', allowEmptyResults: true, skipMarkingBuildUnstable: true
+  steps {
+    dir('front') {
+      sh 'npm ci'
+      script {
+        def exitCode = sh(script: 'npm run e2e', returnStatus: true)
+        if (exitCode != 0) {
+          echo '❌ Tests Cypress échoués.'
+          sh """
+            curl -H "Content-Type:application/json" -X POST -d '{
+              "content": "❌ **Tests Cypress échoués !**\\nVoir les résultats dans Jenkins pour plus d’informations."
+            }' "${DISCORD_WEBHOOK_TEST}"
+          """
+          error('Fin du build suite à des erreurs Cypress')
+        } else {
+          echo '✅ Tests Cypress passés avec succès.'
+          sh """
+            curl -H "Content-Type:application/json" -X POST -d '{
+              "content": "✅ Tests Cypress passés avec succès !"
+            }' "${DISCORD_WEBHOOK_TEST}"
+          """
         }
       }
     }
+  }
+  post {
+    always {
+      junit testResults: 'front/cypress/results/*.xml', allowEmptyResults: true, skipMarkingBuildUnstable: true
+    }
+  }
+}
 
     stage('Test E2E (Cypress) - DÉSACTIVÉ') {
       steps {
