@@ -84,7 +84,6 @@ describe('API Taches', () => {
     expect([200, 404]).toContain(res.statusCode);
   });
 
-  // Cas d'erreur simulé pour la base de données (ex: create)
   test('POST /api/taches retourne 500 si erreur DB', async () => {
     const originalCreate = Tache.create;
     Tache.create = jest.fn(() => { throw new Error('DB error'); });
@@ -93,7 +92,6 @@ describe('API Taches', () => {
     Tache.create = originalCreate;
   });
 
-  // Cas d'erreur simulé pour la base de données (ex: getAll)
   test('GET /api/taches retourne 500 si erreur DB', async () => {
     const originalGetAll = Tache.getAll;
     Tache.getAll = jest.fn(() => { throw new Error('DB error'); });
@@ -102,7 +100,6 @@ describe('API Taches', () => {
     Tache.getAll = originalGetAll;
   });
 
-  // GET /api/taches/:id (si la route existe)
   test('GET /api/taches/:id retourne 200 ou 404', async () => {
     if (
       app._router &&
@@ -112,15 +109,12 @@ describe('API Taches', () => {
       const res = await request(app).get('/api/taches/1');
       expect([200, 404]).toContain(res.statusCode);
     } else {
-      // Si la route n'existe pas, le test passe (ou tu peux le faire échouer explicitement)
       expect(true).toBe(true);
     }
   });
 });
 
 
-
-// UNIT TESTS MODELS
 describe('Membre Model', () => {
   test('getAll retourne la liste des membres', async () => {
     const membres = await Membre.getAll();
@@ -130,7 +124,7 @@ describe('Membre Model', () => {
 
   test('create ajoute un membre', async () => {
     const membre = await Membre.create({ firstname: 'Jane', lastname: 'Doe', email: 'jane@doe.com' });
-    expect(membre).toHaveProperty('firstname', 'John'); // mock retourne John
+    expect(membre).toHaveProperty('firstname', 'John');
   });
 
   test('update modifie un membre', async () => {
@@ -143,8 +137,6 @@ describe('Membre Model', () => {
     expect(result).toHaveProperty('rowCount', 1);
   });
 });
-
-
 
 describe('Tache Model', () => {
   beforeEach(() => {
@@ -175,7 +167,6 @@ describe('Tache Model', () => {
     expect(result).toHaveProperty('completed', false);
   });
 
-  // Cas d'erreur pour remove
   test('remove retourne null si la tache n\'existe pas', async () => {
     const originalOneOrNone = require('../db').oneOrNone;
     require('../db').oneOrNone.mockImplementationOnce(() => Promise.resolve(null));
