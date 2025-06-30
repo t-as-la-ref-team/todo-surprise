@@ -6,9 +6,9 @@ const cors = require('cors');
 app.use(cors());
 const membersRoutes = require('./routes/membres');
 const tachesRoutes = require('./routes/taches');
-const db = require('./db');
 
 app.use(express.json());
+app.use(cors());
 app.use('/api/membres', membersRoutes);
 app.use('/api/taches', tachesRoutes);
 
