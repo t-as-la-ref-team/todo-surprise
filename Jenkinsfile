@@ -13,6 +13,7 @@ pipeline {
     DISCORD_WEBHOOK_GIT    = credentials('discord-webhook-git')
     DISCORD_WEBHOOK_TEST   = credentials('discord-webhook-test')
     DISCORD_WEBHOOK_SONAR  = credentials('discord-webhook-sonar')
+    DEPLOY_FOLDER = "${env.GIT_BRANCH == 'origin/main' ? 'production' : 'staging'}"
   }
 
   stages {
@@ -32,10 +33,17 @@ pipeline {
       }
     }
 
-    stage('Test E2E (Cypress)') {
+    stage('Install Frontend Dependencies') {
       steps {
         dir('frontend') {
           sh 'npm ci'
+        }
+      }
+    }
+
+    stage('Test E2E (Cypress)') {
+      steps {
+        dir('frontend') {
           script {
             def exitCode = sh(script: 'npm run test:e2e', returnStatus: true)
             if (exitCode != 0) {
@@ -64,38 +72,41 @@ pipeline {
       }
     }
 
-    // Commentez temporairement les étapes nécessitant npm
-    stage('Test E2E (Cypress) - DÉSACTIVÉ') {
+    stage('Build Frontend') {
       steps {
-        echo "Tests Cypress temporairement désactivés - Docker non disponible sur le serveur Jenkins"
-        sh """
-          curl -H "Content-Type:application/json" -X POST -d '{
-            "content": "⚠️ **Tests Cypress ignorés** - Configuration Docker non disponible"
-          }' "${DISCORD_WEBHOOK_TEST}"
-        """
+        dir('frontend') {
+          sh 'npm run build'
+        }
       }
     }
-    
-    // stage('Analyse SonarQube') {
-    //   when {
-    //     expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
-    //   }
-    //   steps {
-    //     withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
-    //       sh '''
-    //         sonar-scanner \
-    //           -Dsonar.projectKey=t-as-la-ref \
-    //           -Dsonar.sources=. \
-    //           -Dsonar.host.url=http://212.83.130.69:9000 \
-    //           -Dsonar.token=$SONAR_TOKEN
-    //       '''
-    //     }
-    //   }
-    // }
+
+    stage('Docker Build and Tag') {
+      steps {
+        script {
+          sh 'docker compose -f docker-compose.yml build'
+        }
+      }
+    }
+
+    stage('Docker Save and Copy Artifacts') {
+      steps {
+        script {
+          def timestamp = sh(script: "date +%Y%m%d-%H%M%S", returnStdout: true).trim()
+          def imageTag = "${DEPLOY_FOLDER}-${timestamp}"
+
+          sh """
+            docker save my-frontend-image > ${imageTag}-frontend.tar
+            docker save my-backend-image > ${imageTag}-backend.tar
+            mkdir -p /var/jenkins_home/deploy/${DEPLOY_FOLDER}
+            mv ${imageTag}-*.tar /var/jenkins_home/deploy/${DEPLOY_FOLDER}/
+          """
+        }
+      }
+    }
 
     stage('Analyse SonarQube - DÉSACTIVÉ') {
       steps {
-        echo "Analyse SonarQube temporairement désactivée - sonar-scanner non disponible sur le serveur Jenkins"
+        echo "Analyse SonarQube temporairement désactivée - scanner non disponible"
         sh """
           curl -H "Content-Type:application/json" -X POST -d '{
             "content": "⚠️ **Analyse SonarQube ignorée** - Scanner non disponible"
@@ -111,10 +122,20 @@ pipeline {
       steps {
         sh """
           curl -H "Content-Type:application/json" -X POST -d '{
-            "content": "📊 Analyse **SonarQube** terminée avec succès. 🔍"
+            "content": "📊 Analyse **SonarQube** (désactivée) - build Docker terminé avec succès dans `${DEPLOY_FOLDER}`."
           }' "${DISCORD_WEBHOOK_SONAR}"
         """
       }
+    }
+  }
+
+  post {
+    failure {
+      sh """
+        curl -H "Content-Type:application/json" -X POST -d '{
+          "content": "🚨 **Build échoué** ! Consultez Jenkins pour plus de détails."
+        }' "${DISCORD_WEBHOOK_GIT}"
+      """
     }
   }
 }
