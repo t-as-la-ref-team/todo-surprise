@@ -33,42 +33,45 @@ pipeline {
       }
     }
 
-    stage('Test E2E (Cypress)') {
-      steps {
-        dir('front') {
-          sh 'npm ci'
-          script {
-            // Lancement du serveur Angular sans bloquer
-            sh 'nohup npm run start -- --host=0.0.0.0 --port=4200 &>/dev/null &'
-            // Attente que le serveur soit up
-            sh 'npx wait-on http://localhost:4200 --timeout=60000'
+  stage('Test E2E (Cypress)') {
+    steps {
+      dir('front') {
+        sh 'npm ci'
+        script {
+          // Lancer le serveur Angular et logger dans angular.log
+          sh 'nohup npm run start -- --host=0.0.0.0 --port=4200 > angular.log 2>&1 &'
 
-            def exitCode = sh(script: 'npm run test:e2e', returnStatus: true)
-            if (exitCode != 0) {
-              echo '❌ Tests Cypress échoués.'
-              sh """
-                curl -H "Content-Type:application/json" -X POST -d '{
-                  "content": "❌ **Tests Cypress échoués !**\\nVoir les résultats dans Jenkins pour plus d’informations."
-                }' "${DISCORD_WEBHOOK_TEST}"
-              """
-              error('Fin du build suite à des erreurs Cypress')
-            } else {
-              echo '✅ Tests Cypress passés avec succès.'
-              sh """
-                curl -H "Content-Type:application/json" -X POST -d '{
-                  "content": "✅ Tests Cypress passés avec succès !"
-                }' "${DISCORD_WEBHOOK_TEST}"
-              """
-            }
+          // Attendre max 60s que le serveur réponde
+          sh 'npx wait-on http://localhost:4200 --timeout=60000'
+
+          // Exécution des tests E2E
+          def exitCode = sh(script: 'npm run test:e2e', returnStatus: true)
+          if (exitCode != 0) {
+            echo '❌ Tests Cypress échoués.'
+            sh """
+              curl -H "Content-Type:application/json" -X POST -d '{
+                "content": "❌ **Tests Cypress échoués !**\\nVoir les résultats dans Jenkins pour plus d’informations."
+              }' "${DISCORD_WEBHOOK_TEST}"
+            """
+            error('Fin du build suite à des erreurs Cypress')
+          } else {
+            echo '✅ Tests Cypress passés avec succès.'
+            sh """
+              curl -H "Content-Type:application/json" -X POST -d '{
+                "content": "✅ Tests Cypress passés avec succès !"
+              }' "${DISCORD_WEBHOOK_TEST}"
+            """
           }
         }
       }
-      post {
-        always {
-          junit testResults: 'front/cypress/results/*.xml', allowEmptyResults: true, skipMarkingBuildUnstable: true
-        }
+    }
+    post {
+      always {
+        junit testResults: 'front/cypress/results/*.xml', allowEmptyResults: true, skipMarkingBuildUnstable: true
       }
     }
+  }
+
 
     // stage('Analyse SonarQube') {
     //   when {
