@@ -15,6 +15,7 @@ pipeline {
     DISCORD_WEBHOOK_SONAR  = credentials('discord-webhook-sonar')
   }
 
+
   stages {
     stage('Notifier Discord') {
       steps {
