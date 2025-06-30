@@ -93,6 +93,7 @@ pipeline {
     //   }
     // }
 
+
     stage('Analyse SonarQube - DÉSACTIVÉ') {
       steps {
         echo "Analyse SonarQube temporairement désactivée - sonar-scanner non disponible sur le serveur Jenkins"
