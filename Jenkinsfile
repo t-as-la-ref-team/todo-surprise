@@ -33,6 +33,7 @@ pipeline {
       }
     }
 
+
   stage('Test E2E (Cypress)') {
     steps {
       dir('front') {
