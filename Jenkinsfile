@@ -37,7 +37,10 @@ pipeline {
         dir('front') {
           sh 'npm ci'
           script {
-            sh 'nohup npm run start &'
+            // Démarre le serveur Angular en tâche de fond avec redirection de la sortie
+            sh 'nohup npm run start -- --host=0.0.0.0 --port=4200 > angular.log 2>&1 &'
+
+            // Attend que le serveur soit prêt
             sh 'npx wait-on http://localhost:4200'
             def exitCode = sh(script: 'npm run test:e2e', returnStatus: true)
             if (exitCode != 0) {
