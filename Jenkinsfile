@@ -38,7 +38,7 @@ pipeline {
           sh 'npm ci'
           script {
             sh 'nohup npm run start &'
-            sleep 15
+            sh 'npx wait-on http://localhost:4200'
             def exitCode = sh(script: 'npm run test:e2e', returnStatus: true)
             if (exitCode != 0) {
               echo '❌ Tests Cypress échoués.'
