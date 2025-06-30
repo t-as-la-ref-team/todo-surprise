@@ -1,42 +1,69 @@
 const express = require('express');
 const router = express.Router();
+const db = require('../db');
 
-members = []
-
-router.post('/', (req, res) => {
-  const { nom,prenom, email } = req.body;
-  const newMember = {
-    id: members.length + 1,
-    nom,
-    prenom,
-    email
-  };
-  members.push(newMember);
-  res.status(201).json(newMember);
+// POST - ajouter un membre
+router.post('/', async (req, res) => {
+  const { firstname, lastname, email } = req.body;
+  try {
+    const newMember = await db.one(
+      'INSERT INTO users(firstname, lastname, email) VALUES($1, $2, $3) RETURNING *',
+      [firstname, lastname, email]
+    );
+    res.status(201).json(newMember);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-router.get('/', (req, res) => {
-  res.json(members);
+// GET - récupérer tous les membres
+router.get('/', async (req, res) => {
+  try {
+    const members = await db.any('SELECT * FROM users ORDER BY id');
+    res.json(members);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-router.put('/:id', (req, res) => {
-  const member = members.find(m => m.id === parseInt(req.params.id));
-  if (!member) return res.status(404).json({ message: 'Membre non trouvé' });
-
-  const { nom, prenom, email } = req.body;
-  if (nom) member.nom = nom;
-  if (prenom) member.prenom = prenom;
-  if (email) member.email = email;
-
-  res.json(member);
+// GET - récupérer un membre par ID
+router.get('/:id', async (req, res) => {
+  try {
+    const member = await db.oneOrNone('SELECT * FROM users WHERE id = $1', [req.params.id]);
+    if (!member) return res.status(404).json({ message: 'Membre non trouvé' });
+    res.json(member);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-router.delete('/:id', (req, res) => {
-  const index = members.findIndex(m => m.id === parseInt(req.params.id));
-  if (index === -1) return res.status(404).json({ message: 'Membre non trouvé' });
+// PUT - modifier un membre
+router.put('/:id', async (req, res) => {
+  const { firstname, lastname, email } = req.body;
+  try {
+    const updated = await db.oneOrNone(
+      `UPDATE users
+       SET firstname = $1, lastname = $2, email = $3
+       WHERE id = $4
+       RETURNING *`,
+      [firstname, lastname, email, req.params.id]
+    );
+    if (!updated) return res.status(404).json({ message: 'Membre non trouvé' });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-  const deleted = members.splice(index, 1);
-  res.json({ message: 'Membre supprimé', membre: deleted[0] });
+// DELETE - supprimer un membre
+router.delete('/:id', async (req, res) => {
+  try {
+    const deleted = await db.oneOrNone('DELETE FROM users WHERE id = $1 RETURNING *', [req.params.id]);
+    if (!deleted) return res.status(404).json({ message: 'Membre non trouvé' });
+    res.json({ message: 'Membre supprimé', membre: deleted });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;
