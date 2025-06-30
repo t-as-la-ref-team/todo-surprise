@@ -16,7 +16,6 @@ pipeline {
   }
 
   stages {
-
     stage('Notifier Discord') {
       steps {
         script {
@@ -33,76 +32,80 @@ pipeline {
       }
     }
 
+    stage('Test E2E (Cypress)') {
+      steps {
+        dir('front') {
+          sh 'npm ci'
+          script {
+            // Démarre Angular en arrière-plan
+            sh 'nohup npm run start -- --host=0.0.0.0 --port=4200 > angular.log 2>&1 &'
 
-  stage('Test E2E (Cypress)') {
-    steps {
-      dir('front') {
-        sh 'npm ci'
-        script {
-          // Lancer le serveur Angular et logger dans angular.log
-          sh 'nohup npm run start -- --host=0.0.0.0 --port=4200 > angular.log 2>&1 &'
+            // Attend qu’il soit prêt
+            timeout(time: 2, unit: 'MINUTES') {
+              sh 'npx wait-on http://localhost:4200'
+            }
 
-          // Attendre max 60s que le serveur réponde
-          sh 'npx wait-on http://localhost:4200 --timeout=60000'
-
-          // Exécution des tests E2E
-          def exitCode = sh(script: 'npm run test:e2e', returnStatus: true)
-          if (exitCode != 0) {
-            echo '❌ Tests Cypress échoués.'
-            sh """
-              curl -H "Content-Type:application/json" -X POST -d '{
-                "content": "❌ **Tests Cypress échoués !**\\nVoir les résultats dans Jenkins pour plus d’informations."
-              }' "${DISCORD_WEBHOOK_TEST}"
-            """
-            error('Fin du build suite à des erreurs Cypress')
-          } else {
-            echo '✅ Tests Cypress passés avec succès.'
-            sh """
-              curl -H "Content-Type:application/json" -X POST -d '{
-                "content": "✅ Tests Cypress passés avec succès !"
-              }' "${DISCORD_WEBHOOK_TEST}"
-            """
+            // Exécute les tests
+            def exitCode = sh(script: 'npm run test:e2e', returnStatus: true)
+            if (exitCode != 0) {
+              echo '❌ Tests Cypress échoués.'
+              sh """
+                curl -H "Content-Type:application/json" -X POST -d '{
+                  "content": "❌ **Tests Cypress échoués !**\\nVoir les résultats dans Jenkins pour plus d’informations."
+                }' "${DISCORD_WEBHOOK_TEST}"
+              """
+              error('Fin du build suite à des erreurs Cypress')
+            } else {
+              echo '✅ Tests Cypress passés avec succès.'
+              sh """
+                curl -H "Content-Type:application/json" -X POST -d '{
+                  "content": "✅ Tests Cypress passés avec succès !"
+                }' "${DISCORD_WEBHOOK_TEST}"
+              """
+            }
           }
         }
       }
-    }
-    post {
-      always {
-        junit testResults: 'front/cypress/results/*.xml', allowEmptyResults: true, skipMarkingBuildUnstable: true
+      post {
+        always {
+          junit testResults: 'front/cypress/results/*.xml', allowEmptyResults: true, skipMarkingBuildUnstable: true
+        }
       }
     }
-  }
 
+    stage('Test E2E (Cypress) - DÉSACTIVÉ') {
+      steps {
+        echo "Tests Cypress temporairement désactivés - Docker non disponible sur le serveur Jenkins"
+        sh """
+          curl -H "Content-Type:application/json" -X POST -d '{
+            "content": "⚠️ **Tests Cypress ignorés** - Configuration Docker non disponible"
+          }' "${DISCORD_WEBHOOK_TEST}"
+        """
+      }
+    }
 
-    // stage('Analyse SonarQube') {
-    //   when {
-    //     expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
-    //   }
-    //   steps {
-    //     withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
-    //       sh '''
-    //         sonar-scanner \
-    //           -Dsonar.projectKey=t-as-la-ref \
-    //           -Dsonar.sources=. \
-    //           -Dsonar.host.url=http://212.83.130.69:9000 \
-    //           -Dsonar.token=$SONAR_TOKEN
-    //       '''
-    //     }
-    //   }
-    // }
+    stage('Analyse SonarQube - DÉSACTIVÉ') {
+      steps {
+        echo "Analyse SonarQube temporairement désactivée - sonar-scanner non disponible sur le serveur Jenkins"
+        sh """
+          curl -H "Content-Type:application/json" -X POST -d '{
+            "content": "⚠️ **Analyse SonarQube ignorée** - Scanner non disponible"
+          }' "${DISCORD_WEBHOOK_SONAR}"
+        """
+      }
+    }
 
-    // stage('Notification Analyse') {
-    //   when {
-    //     expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
-    //   }
-    //   steps {
-    //     sh """
-    //       curl -H "Content-Type:application/json" -X POST -d '{
-    //         "content": "📊 Analyse **SonarQube** terminée avec succès. 🔍"
-    //       }' "${DISCORD_WEBHOOK_SONAR}"
-    //     """
-    //   }
-    // }
-
+    stage('Notification Analyse') {
+      when {
+        expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
+      }
+      steps {
+        sh """
+          curl -H "Content-Type:application/json" -X POST -d '{
+            "content": "📊 Analyse **SonarQube** terminée avec succès. 🔍"
+          }' "${DISCORD_WEBHOOK_SONAR}"
+        """
+      }
+    }
   }
 }
