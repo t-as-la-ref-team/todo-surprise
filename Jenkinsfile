@@ -34,7 +34,7 @@ pipeline {
 
     stage('Test E2E (Cypress)') {
       steps {
-        dir('frontend') {
+        dir('front') {
           sh 'npm ci'
           script {
             def exitCode = sh(script: 'npm run test:e2e', returnStatus: true)
