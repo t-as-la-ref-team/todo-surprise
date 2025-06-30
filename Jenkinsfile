@@ -104,6 +104,7 @@ pipeline {
       }
     }
 
+
     stage('Notification Analyse') {
       when {
         expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
