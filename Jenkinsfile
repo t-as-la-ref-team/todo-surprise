@@ -3,7 +3,6 @@ pipeline {
 
   tools {
     nodejs 'NodeJS'
-    sonarQubeScanner 'sonar-scanner' // Assure-toi que ce nom est bien celui défini dans Jenkins > Tools
   }
 
   triggers {
@@ -67,13 +66,16 @@ pipeline {
     }
 
     stage('Analyse SonarQube') {
-      environment {
-        SONAR_HOST_URL = 'http://212.83.130.69:9000'
-      }
       steps {
-        withSonarQubeEnv('sonarqube') {
+        withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
           dir('front') {
-            sh 'sonar-scanner'
+            sh '''
+              sonar-scanner \
+                -Dsonar.projectKey=t-as-la-ref \
+                -Dsonar.sources=. \
+                -Dsonar.host.url=http://212.83.130.69:9000 \
+                -Dsonar.token=$SONAR_TOKEN
+            '''
           }
         }
       }
