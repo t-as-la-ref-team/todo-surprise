@@ -38,7 +38,7 @@ pipeline {
         dir('front') {
           sh 'npm ci'
           script {
-            def exitCode = sh(script: 'npm run test:e2e', returnStatus: true)
+            def exitCode = sh(script: 'xvfb-run --auto-servernum -- npm run test:e2e', returnStatus: true)
             if (exitCode != 0) {
               echo '❌ Tests Cypress échoués.'
               sh """
