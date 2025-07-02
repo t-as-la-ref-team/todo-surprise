@@ -56,12 +56,12 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule
 } from "./chunk-UTNWBRCC.js";
+import "./chunk-5OPE3T2R.js";
 import {
   animationFrameScheduler,
   isObservable,
   merge
 } from "./chunk-4N4GOYJH.js";
-import "./chunk-5OPE3T2R.js";
 import {
   BehaviorSubject,
   Observable,

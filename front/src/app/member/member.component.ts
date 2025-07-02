@@ -56,21 +56,15 @@ export class MemberComponent {
       this.apiService.updateMember(this.currentMember).subscribe({
         next: () => {
           this.loadMembers();
-          this.modalInstance.hide();
+          this.closeModal();
         },
-        error: (err) => {
-          if (err.error && err.error.message && err.error.message.includes('email')) {
-            this.errorMessage = 'This email is already used.';
-          } else {
-            this.errorMessage = 'This email is already used. Please try again.';
-          }
-        }
+        error: err => { this.errorMessage = 'Erreur lors de la modification.'; }
       });
     } else {
       this.apiService.addMember(this.currentMember).subscribe({
         next: () => {
           this.loadMembers();
-          this.modalInstance.hide();
+          this.closeModal();
         },
         error: (err) => {
           if (err.error && err.error.message && err.error.message.includes('email')) {
@@ -104,6 +98,12 @@ export class MemberComponent {
       this.modalInstance.show();
     } else {
       console.error('Modal element with id "memberModal" not found.');
+    }
+  }
+
+  closeModal() {
+    if (this.modalInstance) {
+      this.modalInstance.hide();
     }
   }
 }
