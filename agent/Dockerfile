@@ -2,7 +2,7 @@ FROM jenkins/inbound-agent:latest-jdk17
 
 USER root
 
-# Install Docker + Cypress dependencies + NodeJS + Sonar
+# Install Docker, Node.js/npm, Cypress dependencies, Git, curl, unzip
 RUN apt-get update && apt-get install -y \
     docker.io \
     git \
@@ -22,12 +22,18 @@ RUN apt-get update && apt-get install -y \
     libgbm-dev \
     libxshmfence-dev \
     libglu1-mesa \
- && apt-get clean
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install sonar-scanner manually
-RUN curl -Lo /tmp/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856.zip \
+# Install Sonar Scanner
+ENV SONAR_SCANNER_VERSION=4.8.0.2856
+
+RUN curl -Lo /tmp/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
  && unzip /tmp/sonar-scanner.zip -d /opt \
  && mv /opt/sonar-scanner-* /opt/sonar-scanner \
- && ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/bin/sonar-scanner
+ && ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/bin/sonar-scanner \
+ && rm -rf /tmp/sonar-scanner.zip
+
+# Vérification des outils installés
+RUN docker --version && npm --version && sonar-scanner --version
 
 USER jenkins
