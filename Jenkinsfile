@@ -30,6 +30,7 @@ pipeline {
       steps {
         dir('front') {
           sh 'npm install --legacy-peer-deps'
+          sh 'npx cypress install'
           script {
             def exitCode = sh(script: 'npm run e2e', returnStatus: true)
             if (exitCode != 0) {
@@ -71,3 +72,4 @@ pipeline {
     }
   }
 }
+
