@@ -1,20 +1,18 @@
 pipeline {
-  agent {
-    docker {
-      image 't-as-la-ref-agent:latest' // ⬅ mets ici le bon nom de ton image
-      args '-u root -v /var/run/docker.sock:/var/run/docker.sock'
-    }
-  }
+  agent any
 
   environment {
-    DISCORD_WEBHOOK_GIT    = credentials('discord-webhook-git')
-    DISCORD_WEBHOOK_TEST   = credentials('discord-webhook-test')
-    DISCORD_WEBHOOK_SONAR  = credentials('discord-webhook-sonar')
-    SONAR_TOKEN            = credentials('sonarqube-token')
+    DISCORD_WEBHOOK_GIT = credentials('discord-webhook-git')
   }
 
   stages {
     stage('Notifier Discord') {
+      agent {
+        docker {
+          image 't-as-la-ref-agent:latest'
+          args '-u root -v /var/run/docker.sock:/var/run/docker.sock'
+        }
+      }
       steps {
         script {
           def author = sh(script: "git log -1 --pretty=format:%an", returnStdout: true).trim()
@@ -68,6 +66,6 @@ pipeline {
     //     }
     //   }
     // }
-    
+
   }
 }
