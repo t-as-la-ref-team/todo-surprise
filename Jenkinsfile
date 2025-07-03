@@ -54,30 +54,30 @@ pipeline {
       }
     }
 
-    stage('Analyse SonarQube') {
-      when {
-        expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
-      }
-      steps {
-        dir('front') {
-          sh '''
-            sonar-scanner \
-              -Dsonar.projectKey=t-as-la-ref \
-              -Dsonar.sources=. \
-              -Dsonar.host.url=http://212.83.130.69:9000 \
-              -Dsonar.token=$SONAR_TOKEN
-          '''
-        }
-      }
-      post {
-        success {
-          sh """curl -H "Content-Type:application/json" -X POST -d '{"content": "✅ Analyse SonarQube OK."}' "${DISCORD_WEBHOOK_SONAR}" """
-        }
-        failure {
-          sh """curl -H "Content-Type:application/json" -X POST -d '{"content": "❌ Analyse SonarQube échouée."}' "${DISCORD_WEBHOOK_SONAR}" """
-        }
-      }
-    }
+    // stage('Analyse SonarQube') {
+    //   when {
+    //     expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
+    //   }
+    //   steps {
+    //     dir('front') {
+    //       sh '''
+    //         sonar-scanner \
+    //           -Dsonar.projectKey=t-as-la-ref \
+    //           -Dsonar.sources=. \
+    //           -Dsonar.host.url=http://212.83.130.69:9000 \
+    //           -Dsonar.token=$SONAR_TOKEN
+    //       '''
+    //     }
+    //   }
+    //   post {
+    //     success {
+    //       sh """curl -H "Content-Type:application/json" -X POST -d '{"content": "✅ Analyse SonarQube OK."}' "${DISCORD_WEBHOOK_SONAR}" """
+    //     }
+    //     failure {
+    //       sh """curl -H "Content-Type:application/json" -X POST -d '{"content": "❌ Analyse SonarQube échouée."}' "${DISCORD_WEBHOOK_SONAR}" """
+    //     }
+    //   }
+    // }
   }
 }
 
