@@ -1,20 +1,32 @@
-FROM node:18 AS builder
+# Stage 1: Build Angular app
+FROM node:20-alpine AS build
 
 WORKDIR /app
+
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 COPY . .
-RUN npm run build --prod
+RUN npx ng build --configuration production
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
 
-# Copy built app to nginx public folder
-COPY --from=builder /app/dist/<your-app-name> /usr/share/nginx/html
+# Clean default Nginx files
+RUN rm -rf /usr/share/nginx/html/*
 
-# Copy a default nginx config (optional)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy app from build stage
+COPY --from=build /app/dist/abubakkar-apps /usr/share/nginx/html
+
+# Fix permissions to avoid 403 Forbidden
+RUN chmod -R 755 /usr/share/nginx/html
+
+# Optionally, set ownership to nginx user (id 101)
+RUN chown -R nginx:nginx /usr/share/nginx/html
+
+# Copy custom config
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]
