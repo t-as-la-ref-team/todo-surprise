@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "postinstall": "npx cypress install",
-    "start": "ng serve --host=0.0.0.0 --port=4200 --disable-host-check --watch",
+    "start": "ng serve --host=0.0.0.0 --port=4200 --disable-host-check --watch=false",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
