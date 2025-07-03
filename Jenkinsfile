@@ -18,6 +18,8 @@ pipeline {
         }
       }
       steps {
+        // 🔧 on force le clone dans le conteneur
+        checkout scm
         script {
           def author = sh(script: "git log -1 --pretty=format:%an", returnStdout: true).trim()
           def message = sh(script: "git log -1 --pretty=format:%s", returnStdout: true).trim()
@@ -35,6 +37,7 @@ pipeline {
         }
       }
       steps {
+        checkout scm
         dir('front') {
           sh 'npm ci'
           script {
@@ -63,6 +66,7 @@ pipeline {
         }
       }
       steps {
+        checkout scm
         dir('front') {
           sh '''
             sonar-scanner \
