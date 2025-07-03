@@ -33,7 +33,11 @@ RUN curl -Lo /tmp/sonar-scanner.zip https://binaries.sonarsource.com/Distributio
  && ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/bin/sonar-scanner \
  && rm -rf /tmp/sonar-scanner.zip
 
+# ✅ Préinstaller Cypress globalement (et désactiver les tentatives de téléchargement dans le pipeline)
+ENV CYPRESS_INSTALL_BINARY=0
+RUN npm install -g cypress@14.5.1
+
 # Vérification des outils installés
-RUN docker --version && npm --version && sonar-scanner --version
+RUN docker --version && npm --version && sonar-scanner --version && cypress --version
 
 USER jenkins
