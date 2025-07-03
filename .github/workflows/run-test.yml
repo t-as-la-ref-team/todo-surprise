@@ -30,13 +30,8 @@ jobs:
       - name: Run tests
         run: cd ./backend && npm test
 
-      - name: Start backend in background
-        run: cd backend && npm start
-      - name: Wait for backend to be ready
-        run: |
-          until curl --output /dev/null --silent --head --fail http://localhost:3000/api/membres; do
-            echo "Waiting for backend..."
-            sleep 3
-          done
+      - name: start docker-compose
+        run: cd ./backend && docker-compose up -d
+
       - name: Run performance tests
         run: k6 run tests/performance.test.js
