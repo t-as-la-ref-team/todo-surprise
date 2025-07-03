@@ -10,8 +10,13 @@ jobs:
 
       - name: Send Discord notification
         if: always()
+        env:
+          REF_NAME: ${{ github.ref_name }}
+          ACTOR: ${{ github.actor }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           curl -H "Content-Type: application/json" \
                -X POST \
-               -d '{"content":"📢 Push sur **${{ github.ref_name }}**\n👤 Auteur : **${{ github.actor }}**\n📝 Commit : **${{ github.event.head_commit.message }}**"}' \
-               ${{ secrets.DISCORD_WEBHOOK_URL }}
+               -d "{\"content\":\"📢 Push sur **${REF_NAME}**\n👤 Auteur : **${ACTOR}**\n📝 Commit : **${COMMIT_MSG}**\"}" \
+               $DISCORD_WEBHOOK_URL
