@@ -31,7 +31,9 @@ jobs:
         run: cd ./backend && npm test
 
       - name: Start backend in background
-        run: nohup npm start &
+        run: |
+          cd backend
+          nohup npm start > backend.log 2>&1 &
       - name: Wait for backend to be ready
         run: |
           until curl --output /dev/null --silent --head --fail http://localhost:3000/api/membres; do
