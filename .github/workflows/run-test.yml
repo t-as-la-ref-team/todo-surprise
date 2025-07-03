@@ -31,7 +31,7 @@ jobs:
         run: cd ./backend && npm test
 
       - name: start docker-compose
-        run: cd ./backend && docker-compose up -d
+        run: cd ./backend && docker compose up -d
 
       - name: Run performance tests
         run: k6 run tests/performance.test.js
