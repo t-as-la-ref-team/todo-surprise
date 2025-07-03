@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:e2e": "cypress run --config-file cypress.config.ts",
-    "e2e": "start-server-and-test start http://0.0.0.0:4200 test:e2e --timeout 120000"
+    "e2e": "start-server-and-test start http://localhost:4200 test:e2e --timeout 120000"
   },
   "private": true,
   "dependencies": {
