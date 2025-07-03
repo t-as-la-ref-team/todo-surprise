@@ -23,5 +23,8 @@ jobs:
       - name: Run tests
         run: cd ./backend && npm test
 
+      - name: Install k6
+        run: sudo apt-get update && sudo apt-get install -y k6
+
       - name: Run performance
         run: cd ./backend && npm run performance
