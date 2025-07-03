@@ -29,7 +29,7 @@ pipeline {
     stage('Test E2E (Cypress)') {
       steps {
         dir('front') {
-          sh 'npm ci'
+          sh 'npm install --legacy-peer-deps'
           script {
             def exitCode = sh(script: 'npm run e2e', returnStatus: true)
             if (exitCode != 0) {
