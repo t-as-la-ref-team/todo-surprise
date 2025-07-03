@@ -8,6 +8,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Debug test
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "❌ DISCORD_WEBHOOK_URL est vide ou non défini !"
+            exit 1
+          else
+            echo "✅ DISCORD_WEBHOOK_URL est bien défini."
+          fi
+
       - name: Send Discord notification
         if: always()
         env:
