@@ -22,3 +22,6 @@ jobs:
 
       - name: Run tests
         run: cd ./backend && npm test
+
+      - name: Run performance
+        run: cd ./backend && npm run performance
