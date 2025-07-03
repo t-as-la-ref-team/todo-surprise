@@ -34,7 +34,6 @@ pipeline {
 
           // Installation des dépendances
           sh 'npm install --legacy-peer-deps'
-          sh 'npx cypress install'
 
           // Lancer les tests
           script {
