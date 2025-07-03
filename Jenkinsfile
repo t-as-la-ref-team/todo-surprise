@@ -7,7 +7,7 @@ pipeline {
   }
 
   environment {
-    DISCORD_WEBHOOK_GIT    = credentials('discord-webhook-git')
+    DISCORD_WEBHOOK_GIT    = credentials('github-webhook-secret')
     DISCORD_WEBHOOK_TEST   = credentials('discord-webhook-test')
     DISCORD_WEBHOOK_SONAR  = credentials('discord-webhook-sonar')
     SONAR_TOKEN            = credentials('sonarqube-token')
