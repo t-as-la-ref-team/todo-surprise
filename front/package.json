@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:e2e": "cypress run",
-    "e2e": "start-server-and-test start http://localhost:4200 test:e2e"
+    "e2e": "start-server-and-test start http://172.17.0.2:4200 test:e2e"
   },
   "private": true,
   "dependencies": {
