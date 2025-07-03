@@ -29,8 +29,14 @@ pipeline {
     stage('Test E2E (Cypress)') {
       steps {
         dir('front') {
+          // Supprimer potentiellement l'ancien fichier JS de config Cypress
+          sh 'if [ -f cypress.config.js ]; then rm cypress.config.js; fi'
+
+          // Installation des dépendances
           sh 'npm install --legacy-peer-deps'
           sh 'npx cypress install'
+
+          // Lancer les tests
           script {
             def exitCode = sh(script: 'npm run e2e', returnStatus: true)
             if (exitCode != 0) {
@@ -50,6 +56,9 @@ pipeline {
     }
 
     stage('Analyse SonarQube') {
+      when {
+        expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
+      }
       steps {
         dir('front') {
           sh '''
