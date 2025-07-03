@@ -31,7 +31,7 @@ pipeline {
         dir('front') {
           sh 'npm ci'
           script {
-            def exitCode = sh(script: 'npm run e2e', returnStatus: true)
+            def exitCode = sh(script: 'npx wait-on http://localhost:4200 && npm run test:e2e', returnStatus: true)
             if (exitCode != 0) {
               sh """curl -H "Content-Type:application/json" -X POST -d '{"content": "❌ Tests Cypress échoués."}' "${DISCORD_WEBHOOK_TEST}" """
               error('Cypress failed')
