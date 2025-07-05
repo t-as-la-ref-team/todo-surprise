@@ -4,6 +4,10 @@ services:
   frontend:
     build:
       context: ./front
+      args:
+        NODE_ENV: ${NODE_ENV}
+    enviromnent:
+      - NODE_ENV=${NODE_ENV}
     ports:
       - "${FRONT_PORT}:80"
     depends_on:
