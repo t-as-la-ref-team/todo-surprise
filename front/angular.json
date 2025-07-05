@@ -29,8 +29,7 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": [],
-            "proxyConfig": "proxy.conf.json"
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -73,7 +72,9 @@
               "buildTarget": "abubakkar-apps:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
