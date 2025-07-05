@@ -10,7 +10,7 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npx ng build --configuration=development
+RUN npx ng build
 
 
 # Stage 2: Serve with Nginx
