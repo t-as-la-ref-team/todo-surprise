@@ -6,7 +6,7 @@ services:
       context: ./front
       args:
         NODE_ENV: ${NODE_ENV}
-    enviromnent:
+    environment:
       - NODE_ENV=${NODE_ENV}
     ports:
       - "${FRONT_PORT}:80"
