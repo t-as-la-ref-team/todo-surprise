@@ -64,6 +64,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": {
               "buildTarget": "abubakkar-apps:build:production"
@@ -72,9 +75,7 @@
               "buildTarget": "abubakkar-apps:build:development"
             }
           },
-          "defaultConfiguration": "development",
-          "options": {
-            "proxyConfig": "proxy.conf.json"
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
@@ -105,4 +106,4 @@
   "cli": {
     "analytics": "be3561a9-ea51-4f78-b7e1-157886b7abdc"
   }
-}}
+}
