@@ -10,7 +10,7 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npx ng build --configuration $NODE_ENV
+RUN npx ng build --configuration
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
