@@ -65,4 +65,4 @@ Angular CLI does not include an E2E testing framework by default, so you can cho
 ## 📚 Additional Resources  
 For more information on Angular CLI, visit the official [Angular CLI Documentation](https://angular.dev/tools/cli).
  
-optimize above project description for search results and also add tags
+optimize above project description for search results and also add tags.
