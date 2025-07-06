@@ -13,8 +13,8 @@ import { environment } from '../../environments/environment';
 export class ApiService {
 
   private apiBaseUrl = environment.apiBaseUrl;
-  private apiUrl = '${this.apiBaseUrl}/membres';
-  private tasksUrl = '${this.apiBaseUrl}/taches';
+  private apiUrl = `${this.apiBaseUrl}/membres`;
+  private tasksUrl = `${this.apiBaseUrl}/taches`;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -36,7 +36,6 @@ export class ApiService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  
   // Task-related methods
 
   getTasks(): Observable<Task[]> {

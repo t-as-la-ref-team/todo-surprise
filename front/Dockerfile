@@ -1,13 +1,18 @@
 # Stage 1: Build Angular app
 FROM node:20-alpine AS build
 
+ARG NODE_ENV
+ENV NODE_ENV=$NODE_ENV
+
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json angular.json tsconfig*.json ./
+COPY src ./src
 RUN npm ci
 
 COPY . .
-RUN npx ng build --configuration production
+RUN npx ng build
+
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
