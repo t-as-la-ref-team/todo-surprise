@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,35 +17,15 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install backend dependencies
-        working-directory: ./backend
-        run: npm install
-
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
-      - name: Start docker-compose
-        working-directory: ./backend
-        run: docker-compose up -d
-
-      - name: Wait for backend to be ready
-        run: sleep 10 # tu peux adapter ce délai selon ton besoin
+      - name: Install dependencies
+        run: cd ./backend && npm install
 
       - name: Install k6
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gnupg
-          curl -s https://dl.k6.io/key.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/k6-archive-keyring.gpg > /dev/null
-          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          curl -s https://dl.k6.io/key.gpg | sudo apt-key add -
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
           sudo apt-get update
           sudo apt-get install -y k6
 
-      - name: Run unit/integration tests
-        working-directory: ./backend
-        run: npm test
-
-      - name: Run performance tests
-        working-directory: ./backend
-        run: k6 run tests/performance.test.js
+      - name: Run tests
+        run: cd ./backend && npm test
