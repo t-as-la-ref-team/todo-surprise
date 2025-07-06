@@ -34,4 +34,6 @@ jobs:
         run: cd ./backend && docker compose up -d
 
       - name: Run performance tests
-        run: k6 run tests/performance.test.js
+        run: |
+          cd ./backend
+          k6 run tests/perfermormance.js
