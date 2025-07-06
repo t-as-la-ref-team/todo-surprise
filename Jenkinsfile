@@ -116,5 +116,19 @@ pipeline {
         """
       }
     }
+
+    stage('Notification Fin de Build') {
+      steps {
+        script {
+          def status = currentBuild.result ?: 'SUCCESS'
+          def message = status == 'SUCCESS' ? "🎉 Le build s'est terminé avec succès !" : "❌ Le build a échoué."
+          sh """
+            curl -H "Content-Type:application/json" -X POST -d '{
+              "content": "${message}"
+            }' "${DISCORD_WEBHOOK_GIT}"
+          """
+        }
+      }
+    }
   }
 }

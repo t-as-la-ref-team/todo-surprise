@@ -1,15 +1,18 @@
 const express = require('express');
-//require('dotenv').config();
+require('dotenv').config();
 const app = express();
-const port = 3000;
+const port = process.env.BACK_PORT || 3000;
+const frontport = process.env.FRONT_PORT || 8000;
 const cors = require('cors');
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
+
 const membersRoutes = require('./routes/membres');
 const tachesRoutes = require('./routes/taches');
 
 app.use(express.json());
-app.use(cors());
 app.use('/api/membres', membersRoutes);
 app.use('/api/taches', tachesRoutes);
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port, '0.0.0.0', () => console.log(`Server running on port ${port}`));

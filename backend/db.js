@@ -1,11 +1,12 @@
 const pgp = require('pg-promise')();
+require('dotenv').config();
 
 const db = pgp({
-  host:'db',
-  port: 5432,
-  database: 'mydb',
-  user: 'user',
-  password: 'password'
+  host: 'db',
+  port: parseInt(process.env.DB_PORT, 10), // convertir en nombre
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS
 });
 
 db.connect()
