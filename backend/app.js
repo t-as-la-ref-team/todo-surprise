@@ -4,9 +4,6 @@ const app = express();
 const port = process.env.BACK_PORT || 3000;
 const frontport = process.env.FRONT_PORT || 8000;
 const cors = require('cors');
-app.use(cors({
-  origin: '*'
-}));
 
 const membersRoutes = require('./routes/membres');
 const tachesRoutes = require('./routes/taches');
