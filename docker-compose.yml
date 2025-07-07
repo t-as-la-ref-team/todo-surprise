@@ -4,26 +4,33 @@ services:
   frontend:
     build:
       context: ./front
+      dockerfile: Dockerfile
       args:
-        NODE_ENV: ${NODE_ENV}
+        NODE_ENV: ${NODE_ENV:-development}
     environment:
-      - NODE_ENV=${NODE_ENV}
+      - NODE_ENV=${NODE_ENV:-development}
     ports:
-      - "${FRONT_PORT}:80"
+      - "${FRONT_PORT:-4200}:80"
     depends_on:
       - backend
+    networks:
+      - app-net
 
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile
     ports:
-      - "${BACK_PORT}:3000"
+      - "${BACK_PORT:-3000}:3000"
     environment:
-      - DB_HOST=${DB_NAME}
+      - DB_HOST=db
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
+      - DB_NAME=${DB_NAME}
     depends_on:
       - db
+    networks:
+      - app-net
 
   db:
     image: postgres:15
@@ -33,6 +40,12 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-net
 
 volumes:
   pgdata:
+
+networks:
+  app-net:
+    driver: bridge

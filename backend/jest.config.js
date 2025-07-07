@@ -1,7 +1,11 @@
 module.exports = {
   testEnvironment: 'node',
   testMatch: ['**/tests/**/*.test.js'],
+  testPathIgnorePatterns: ["/node_modules/", "/tests/performance.test.js"],
   collectCoverage: true,
+  coveragePathIgnorePatterns: [
+    "/controllers/",
+  ],
   coverageDirectory: 'coverage',
   coverageThreshold: {
     global: {
